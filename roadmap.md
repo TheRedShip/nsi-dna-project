@@ -13,4 +13,5 @@
 - [ ] Création de la route `/api/v1/search`
 - [ ] Mise en application des algorithmes sur l'interface web
 - [ ] Mise en application de la base de donnée sur l'interface web 
-- [ ] Poffinage du design CSS de l'interface web 
+- [ ] Peaufinage du design CSS de l'interface web
+
