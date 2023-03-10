@@ -5,7 +5,7 @@ function FetchAPI(query, method) {
             body: method != "GET" ? body : null
         }
  
-        fetch(`/api/v1/query`).then( (result) => {
+        fetch(`/api/v1/${query}`).then( (result) => {
             resolve(result)
         }).catch(reject)
     })

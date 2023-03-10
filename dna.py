@@ -31,7 +31,6 @@ class ADN:
         return self.convertedGen
 
     def __initialize(self):
-        print("ok")
         result = Query(
             """
             SELECT `geneId` FROM dna_genes
@@ -56,7 +55,7 @@ class ADN:
 
             print(result)
 
-    def recherche(word: str, genome: str):
+    def search(word: str, genome: str):
         wordIndex = 0
 
         occurences = []
@@ -74,4 +73,28 @@ class ADN:
                 return [False, []]
 
             wordIndex += 1
+
+        return [True, occurences]
+
+    def searchHard(word: str, genome: str):
+        wordIndex = 0
+
+        occurences = []
+        lastTry = 0
+        i = 0
+        while True:
+            
+            newIndex = genome.find(word[wordIndex], lastTry)
+            lastTry = newIndex
+
+            for char in word:
+                if (genome[newIndex] == word[wordIndex]):
+                    occurences.append(newIndex)
+                    wordIndex += 1
+                    newIndex
+                else:
+                    occurences = []
+            if (len(occurences) == len(word)):
+                break
+
         return [True, occurences]

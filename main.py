@@ -16,7 +16,7 @@ def index():
 genome = "".join(
     [ascii_lowercase[math.floor(random.randint(0, 25))] for i in range(1000)])
 
-app.run(host='0.0.0.0', port=81)
-
 database.InitializeDatabases()
-adn = ADN("TGACGAGTAGAC")
+# adn = ADN("TGACGAGTAGAC")
+
+app.run(host='0.0.0.0', port=81)
