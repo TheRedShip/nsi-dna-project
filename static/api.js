@@ -1,4 +1,4 @@
-function FetchAPI(query, method) {
+function FetchAPI(query, method, body) {
     return new Promise((resolve, reject) => {
         const params = {
             method: method,
@@ -6,7 +6,12 @@ function FetchAPI(query, method) {
         }
  
         fetch(`/api/v1/${query}`).then( (result) => {
-            resolve(result)
+            result.json().then( (formatedResult) => {
+                resolve({
+                    status: result.status,
+                    data: formatedResult
+                })
+            })
         }).catch(reject)
     })
 }

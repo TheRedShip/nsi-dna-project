@@ -1,13 +1,23 @@
 from database import Query
 from constants import DNA_CONVERT_RULES, DNA_CONVERT_OFFSET
 
+def FetchAllDNANames():
+    return Query("SELECT `geneId`, `name` FROM dna_genes")
 
-class ADN:
+def GetDNAFromId(geneId):
+    result = Query("SELECT `geneId`, `name`, `originalText`, `convertedText` FROM dna_genes WHERE geneId = ?", geneId)
+    if len(result) == 0:
+        return
 
-    def __init__(self, originalGen):
+    return DNA(result[0][2], result[0][3], result[0][1], result[0][0])
+
+class DNA:
+
+    def __init__(self, originalGen, convertedGen = None, name = None, geneId = None):
         self.originalGen = originalGen
-        self.convertedGen = None
-        self.geneId = None
+        self.convertedGen = convertedGen
+        self.geneId = geneId
+        self.geneName = name
         self.__initialize()
 
     def __convert(self):
@@ -30,6 +40,8 @@ class ADN:
         return self.convertedGen
 
     def __initialize(self):
+        if (self.geneId): 
+            return
 
         result = Query(
             """
@@ -51,7 +63,7 @@ class ADN:
                 )
                 VALUES (?, ?, ?)
              """,
-                'qsd',
+                'qsdqsdqsd',
                 self.originalGen,
                 self.convertedGen,
             )
@@ -71,11 +83,17 @@ class ADN:
             if (newIndex != -1):
                 occurences.append(newIndex)
             else:
-                return [False, []]
+                return {
+                    "finded": False,
+                    "occurences": []
+                }
 
             wordIndex += 1
 
-        return [True, occurences]
+        return {
+            "finded": True,
+            "occurences": occurences
+        }
 
     def searchHard(self, word: str):
         wordIndex = 0

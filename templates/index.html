@@ -4,10 +4,51 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=1920, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <title>DNA SEARCH</title>
 </head>
 <body>
+    
+    <canvas></canvas>
 
+    <article id="title">
+      <h1>DNA Search</h1>
+      <p>Terminale NSI</p>
+    </article>
+
+    <br><br>
+
+
+    <article id="search">
+        <label for="wordSearch">Search</label>
+    </article>
+    
+    <input type="text" id="search-input">
+    <input type="checkbox" id="hard-search-checkbox">
+    <input type="submit" value="Submit" id="search-button">
+    <br><br>
+    <id id="converted-gene-content">
+        
+    </id>
+
+    <br></br>
+
+    <div>
+        <select id="genes-selector">
+            {% for gene in dnaNames %}
+               <option value="{{ gene[0] }}">{{ gene[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+
+
+    
+
+    
+    
+    <script src="static/canvas.js"></script>
     <script src="static/api.js"></script>
+    <script src="static/main.js"></script>
 </body>
 </html>

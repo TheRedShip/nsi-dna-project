@@ -10,9 +10,11 @@
 ### 13/03/2023
 - [x] Algorithme de conversion depuis le gêne
 - [x] Algorithme de recherche avec lettre collée
-- [ ] Création de l'interface web
-- [ ] Création de la route `/api/v1/genes/:geneId/search/:contentToSearch`
-- [ ] Mise en application des algorithmes sur l'interface web
-- [ ] Mise en application de la base de donnée sur l'interface web 
-- [ ] Peaufinage du design CSS de l'interface web
+- [x] Création de l'interface web
+- [x] Création de la route `/api/v1/genes/:geneId/search/:contentToSearch`
+- [x] Création de la route `/api/v1/genes/:geneId`
+- [x] Mise en application de la base de donnée sur l'interface web 
+- [x] Peaufinage du design CSS de l'interface web
 
+### A faire
+- [] Mise en application des algorithmes sur l'interface web

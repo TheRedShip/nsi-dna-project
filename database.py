@@ -7,6 +7,8 @@ def Query(query: str, *toEscape):
     conn = sqlite3.connect(DATABASE)
 
     result = conn.execute(query, toEscape or ())
+    conn.commit()
+    
     result = result.fetchall()
 
     conn.close()
@@ -39,14 +41,3 @@ def InitializeDatabases():
             positionIndex BIGINT NOT NULL
         )
     """)        
-
-    Query("""
-        INSERT INTO dna_genes (
-                `name`,
-                `originalText`,
-                `convertedText`
-            )
-            VALUES (?, ?, ?)
-    """, "qsd", "qsd", "qsd")
-
-    print(Query("""SELECT * FROM dna_genes"""))
