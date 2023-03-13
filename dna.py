@@ -8,7 +8,6 @@ class ADN:
         self.originalGen = originalGen
         self.convertedGen = None
         self.geneId = None
-
         self.__initialize()
 
     def __convert(self):
@@ -31,13 +30,13 @@ class ADN:
         return self.convertedGen
 
     def __initialize(self):
+
         result = Query(
             """
             SELECT `geneId` FROM dna_genes
             WHERE `originalText` = ? 
             LIMIT 1
-        """, [self.originalGen])
-        print(result)
+        """, self.originalGen)
 
         if len(result) > 0:
             self.geneId = result[0].geneId
@@ -45,17 +44,19 @@ class ADN:
             self.__convert()
             result = Query(
                 """
-                INSERT INTO geneId (
+                INSERT INTO dna_genes (
                     `name`,
                     `originalText`,
                     `convertedText`
                 )
                 VALUES (?, ?, ?)
-            """, ['qsd', self.originalGen, self.convertedGen])
+             """,
+                'qsd',
+                self.originalGen,
+                self.convertedGen,
+            )
 
-            print(result)
-
-    def search(word: str, genome: str):
+    def search(self, word: str):
         wordIndex = 0
 
         occurences = []
@@ -65,7 +66,7 @@ class ADN:
             if (occurences != []):
                 lastOccurence = occurences[len(occurences) - 1]
 
-            newIndex = genome.find(word[wordIndex], lastOccurence)
+            newIndex = self.convertedGen.find(word[wordIndex], lastOccurence)
 
             if (newIndex != -1):
                 occurences.append(newIndex)
@@ -76,25 +77,26 @@ class ADN:
 
         return [True, occurences]
 
-    def searchHard(word: str, genome: str):
+    def searchHard(self, word: str):
         wordIndex = 0
 
         occurences = []
         lastTry = 0
-        i = 0
-        while True:
-            
-            newIndex = genome.find(word[wordIndex], lastTry)
-            lastTry = newIndex
 
-            for char in word:
-                if (genome[newIndex] == word[wordIndex]):
-                    occurences.append(newIndex)
-                    wordIndex += 1
-                    newIndex
-                else:
-                    occurences = []
-            if (len(occurences) == len(word)):
-                break
+        while lastTry < len(self.convertedGen) - 1:
+            newIndex = self.convertedGen.find(word[wordIndex], lastTry)
+            if (newIndex != -1):
+                for char in word:
+                    if (self.convertedGen[newIndex] == word[wordIndex]):
+                        occurences.append(newIndex)
+                        newIndex += 1
+                        wordIndex += 1
+                        lastTry += 1
+                    else:
+                        occurences = []
+                        wordIndex = 0
 
-        return [True, occurences]
+                    if (wordIndex == len(word)):
+                        return [True, occurences]
+            else:
+                return [False, []]

@@ -5,6 +5,19 @@ import math
 import database
 from dna import ADN
 
+database.InitializeDatabases()
+
+alphabet = ["A", "C", "G", "T"]
+genome = "".join(
+    [alphabet[random.randint(0,
+                             len(alphabet) - 1)] for i in range(1000)])
+
+# adn = ADN(genome)
+# adn.convertedGen = adn.convertedGen[:250] + "HUGO" + adn.convertedGen[200:]
+
+# print(adn.search("HUG"))
+# print(adn.searchHard("HUGO"))
+
 app = Flask(__name__)
 
 
@@ -13,10 +26,9 @@ def index():
     return render_template('index.html')
 
 
-genome = "".join(
-    [ascii_lowercase[math.floor(random.randint(0, 25))] for i in range(1000)])
+@app.route('/api/v1/genes/:geneId/search/:content')
+def geneSearch():
+    pass
 
-database.InitializeDatabases()
-# adn = ADN("TGACGAGTAGAC")
 
 app.run(host='0.0.0.0', port=81)
