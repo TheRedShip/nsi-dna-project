@@ -1,19 +1,24 @@
 from database import Query
 from constants import DNA_CONVERT_RULES, DNA_CONVERT_OFFSET
 
+
 def FetchAllDNANames():
     return Query("SELECT `geneId`, `name` FROM dna_genes")
 
+
 def GetDNAFromId(geneId):
-    result = Query("SELECT `geneId`, `name`, `originalText`, `convertedText` FROM dna_genes WHERE geneId = ?", geneId)
+    result = Query(
+        "SELECT `geneId`, `name`, `originalText`, `convertedText` FROM dna_genes WHERE geneId = ?",
+        geneId)
     if len(result) == 0:
         return
 
     return DNA(result[0][2], result[0][3], result[0][1], result[0][0])
 
+
 class DNA:
 
-    def __init__(self, originalGen, convertedGen = None, name = None, geneId = None):
+    def __init__(self, originalGen, convertedGen=None, name=None, geneId=None):
         self.originalGen = originalGen
         self.convertedGen = convertedGen
         self.geneId = geneId
@@ -25,6 +30,11 @@ class DNA:
 
         for charIndex in range(DNA_CONVERT_OFFSET, len(self.originalGen), 3):
             sequence = self.originalGen[charIndex:charIndex + 3]
+            if sequence[0] not in DNA_CONVERT_RULES:
+                continue
+
+            if sequence[1] not in DNA_CONVERT_RULES[sequence[0]]:
+                continue
 
             if (len(sequence) == 3):
 
@@ -40,7 +50,7 @@ class DNA:
         return self.convertedGen
 
     def __initialize(self):
-        if (self.geneId): 
+        if (self.geneId):
             return
 
         result = Query(
@@ -78,22 +88,17 @@ class DNA:
             if (occurences != []):
                 lastOccurence = occurences[len(occurences) - 1]
 
-            newIndex = self.convertedGen.find(word[wordIndex], lastOccurence)
+            newIndex = self.convertedGen.find(word[wordIndex],
+                                              lastOccurence + 1)
 
             if (newIndex != -1):
                 occurences.append(newIndex)
             else:
-                return {
-                    "finded": False,
-                    "occurences": []
-                }
+                return {"finded": False, "occurences": []}
 
             wordIndex += 1
 
-        return {
-            "finded": True,
-            "occurences": occurences
-        }
+        return {"finded": True, "occurences": occurences}
 
     def searchHard(self, word: str):
         wordIndex = 0
@@ -115,12 +120,6 @@ class DNA:
                         wordIndex = 0
 
                     if (wordIndex == len(word)):
-                        return {
-                            "finded": True,
-                            "occurences": occurences
-                        }
+                        return {"finded": True, "occurences": occurences}
             else:
-                return {
-                    "finded": False,
-                    "occurences": []
-                }
+                return {"finded": False, "occurences": []}

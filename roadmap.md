@@ -16,5 +16,8 @@
 - [x] Mise en application de la base de donnée sur l'interface web 
 - [x] Peaufinage du design CSS de l'interface web
 
+### 27/03/2023
+- [x] Compléter l'interface et majoritairement le CSS
+
 ### A faire
 - [] Mise en application des algorithmes sur l'interface web

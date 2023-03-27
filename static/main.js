@@ -9,7 +9,7 @@ const ADD_DNA_CONTENT_INPUT        = document.getElementById('add-dna-content-in
 
 
 String.prototype.replaceAt = function(index, replacement) {
-    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+    return this.substring(0, index) + replacement + this.substring(index + 1, this.length);
 }
 
 let convertedGen;
@@ -38,8 +38,7 @@ SEARCH_BUTTON.addEventListener('click', () => {
         result.data.result.occurences.forEach( (occurence) => {
             const newText = `<span style="color: red">${convertedGen[occurence]}</span>`;
             
-            formatedResult = formatedResult
-                .replaceAt(occurence + indexPlus, newText)
+            formatedResult = formatedResult.replaceAt(occurence + indexPlus, newText)
 
             indexPlus += newText.length - convertedGen[occurence].length
         })

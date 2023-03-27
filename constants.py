@@ -1,4 +1,4 @@
-DATABASE = './db/movies.sqlite'
+DATABASE = './db/dna.sqlite'
 
 DNA_CONVERT_RULES = {
     "A": {
