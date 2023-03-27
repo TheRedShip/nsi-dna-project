@@ -9,7 +9,7 @@
 </head>
 <body>
     
-    <canvas></canvas>
+    <canvas style="opacity:0.5;"></canvas>
 
     <article id="title">
       <h1>DNA Search</h1>
@@ -17,35 +17,46 @@
     </article>
 
     <br><br>
-
-
-    <article id="search">
-        <label for="wordSearch">Search</label>
-    </article>
     
-    <input type="text" id="search-input">
-    <input type="checkbox" id="hard-search-checkbox">
-    <input type="submit" value="Submit" id="search-button">
-    <br><br>
-    <id id="converted-gene-content">
+    <div id="div-content">
+        <article id="search">
+            <label for="wordSearch">Search</label>
+        </article>
         
-    </id>
+        <input type="text" id="search-input">
+        <input type="submit" value="Submit" id="search-button">
+        
+        <input type="checkbox" id="hard-search-checkbox">
 
-    <br></br>
+    
+        <br></br>
+    
+        <div>
+            <select id="genes-selector">
+                {% for gene in dnaNames %}
+                   <option value="{{ gene[0] }}">{{ gene[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <br><br>
+        
+        <div id="converted-gene-div">
+            <p id="converted-gene-content">
+            </p>
+        </div>
 
-    <div>
-        <select id="genes-selector">
-            {% for gene in dnaNames %}
-               <option value="{{ gene[0] }}">{{ gene[1] }}</option>
-            {% endfor %}
-        </select>
+        <br>
+        <br>
+        
+        <article id="search">
+            <label for="addDNA">Add DNA Database</label>
+        </article>
+        <input type="text" id="add-dna-name-input">
+        <input type="text" id="add-dna-content-input">
+        <input type="submit" value="Submit" id="add-dna-button">
+        
     </div>
-
-
-
-    
-
-    
     
     <script src="static/canvas.js"></script>
     <script src="static/api.js"></script>

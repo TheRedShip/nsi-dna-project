@@ -1,3 +1,10 @@
+PARTICLE_NUM = 100
+
+LINE_COLOR = "255,255,255"
+LINE_THICKNESS = 1.5
+
+DISTANCE_BETWEEN_PARTICLE = 130
+
 let canvas = document.querySelector("canvas")
 
 canvas.width = window.innerWidth
@@ -14,12 +21,11 @@ let mousepos = {x:0,y:0, prevx:0, prevy:0,realx:0,realy:0}
 let handleMousemove = (event) => {
     mousepos.prevx = mousepos.x
     mousepos.prevy = mousepos.y
+    
 
-    mousepos.realx=event.clientX
-    mousepos.realy=event.clientY
+    mousepos.x=event.pageX
+    mousepos.y=event.pageY
 
-    mousepos.x = currentTransformedCursor.x
-    mousepos.y = currentTransformedCursor.y
 };
 document.addEventListener('mousemove', handleMousemove);
 
@@ -42,26 +48,47 @@ function drawCircle(c,x,y,r,color){
     c.closePath()
 }
 
+function drawLines(c,x,y, x2, y2,color="rgb(0,0,0)",thick=5,dashed=[]){
+    c.strokeStyle = color
+    c.lineWidth = thick
+    c.setLineDash(dashed);
+    c.beginPath();
+    c.moveTo(x, y)
+    c.lineTo(x2,y2)
+    c.stroke()
+    c.closePath()
+    c.setLineDash([]);
+}
+
+function dist(x1, x2, y1,y2){
+    return ((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))**.5
+}
+
+
 class Particle {
-    constructor(x,y,r){
+    constructor(x,y,velx,vely,r){
         this.x = x
         this.y = y
         this.r = r
 
-        this.vel = {x:0,y:0}
+        this.vel = {x:velx,y:vely}
 
         this.alpha = 1
     }
 
     checkBorder(){
-        if (this.x + this.vel.x - this.r <= 0 || this.x + this.vel.x + this.r >= screenx) {
-            if (this.x + this.vel.x + this.r >= canvas.width) this.x = canvas.width - this.r;
-            if (this.x + this.vel.x - this.r <= 0) this.x = 0 + this.r;
+        if (this.x  - this.r <= 0 || this.x  + this.r >= canvas.width) {
+            if (this.x  + this.r >= canvas.width) this.x = canvas.width - this.r;
+            if (this.x  - this.r <= 0) this.x = 0 + this.r;
 
             this.vel.x *= -1
 
-            if (this.contraint) this.vel.x *= 0.60
-            if (this.friction) this.vel.x *= ballConstant.collisionFriction
+        }
+        if (this.y  + this.r >= canvas.height || this.y - this.r <= 0) {
+             if (this.y  + this.r >= canvas.height) this.y = canvas.height - this.r;   
+                if (this.y  - this.r <= 0) this.y = 0 + this.r;
+                this.vel.y *= -1
+    
         }
     }
 
@@ -70,21 +97,41 @@ class Particle {
         this.y += this.vel.y
     }
     
-    update(){
-        this.draw()
+    update(particles){
+        this.draw(particles)
         this.applyForce()
+        this.checkBorder()
     }
-    draw(){
-        drawCircle(c,this.x,this.y,this.r,`rgba(255,255,255,${alpha}`)
+    draw(particles){
+        drawCircle(c,this.x,this.y,this.r,`rgba(255,255,255,${this.alpha}`)
+
+        for(let i = 0; i<particles.length;i++){
+            let part = particles[i]
+
+            let distance = dist(part.x,this.x,part.y,this.y)
+            if(distance<DISTANCE_BETWEEN_PARTICLE){
+                drawLines(c,this.x,this.y,part.x,part.y,"rgba("+LINE_COLOR+","+String(1-(distance/DISTANCE_BETWEEN_PARTICLE))+")",LINE_THICKNESS)
+                let mouseDist = dist(this.x,mousepos.x,this.y,mousepos.y)
+                // if(mouseDist < DISTANCE_BETWEEN_PARTICLE)             drawLines(c,this.x,this.y,part.x,part.y,"rgba("+LINE_COLOR+","+mouseDist/150+")",LINE_THICKNESS)
+                
+            }
+        }
     }
 }
 
+particles = []
+for(let i = 0;i<PARTICLE_NUM;i++){
+    particles.push(new Particle(Math.random()*canvas.width,Math.random()*canvas.height,Math.random()-0.5,Math.random()-0.5,Math.random()*3))
+}
 
 function animate(){
     c.fillStyle = "rgb(0,15,25)"
     c.fillRect(0,0,window.innerWidth, window.innerHeight)
-    x+=1
-    drawSimpleCircle(c,x,50,50,"rgb(255,255,255)")
+
+    for(let i = 0;i<particles.length;i++){
+        particles[i].update(particles)
+    }
+    
     
     requestAnimationFrame(animate);
 }

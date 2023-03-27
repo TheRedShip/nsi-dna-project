@@ -17,7 +17,7 @@ class DNA:
         self.originalGen = originalGen
         self.convertedGen = convertedGen
         self.geneId = geneId
-        self.geneName = name
+        self.geneName = name or "Invalid gene name"
         self.__initialize()
 
     def __convert(self):
@@ -63,7 +63,7 @@ class DNA:
                 )
                 VALUES (?, ?, ?)
              """,
-                'qsdqsdqsd',
+                self.geneName,
                 self.originalGen,
                 self.convertedGen,
             )
@@ -115,6 +115,12 @@ class DNA:
                         wordIndex = 0
 
                     if (wordIndex == len(word)):
-                        return [True, occurences]
+                        return {
+                            "finded": True,
+                            "occurences": occurences
+                        }
             else:
-                return [False, []]
+                return {
+                    "finded": False,
+                    "occurences": []
+                }
