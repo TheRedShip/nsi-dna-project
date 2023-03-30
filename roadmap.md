@@ -20,4 +20,4 @@
 - [x] Compléter l'interface et majoritairement le CSS
 
 ### A faire
-- [] Mise en application des algorithmes sur l'interface web
+- [x] Mise en application des algorithmes sur l'interface web
